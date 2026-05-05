@@ -4,7 +4,7 @@
 
 <h1>Snowflake Security Toolkit Platform</h1>
 
-<p><strong>The Strategic Governance & Protection Plane for Global Data Warehouse Environments</strong></p>
+<p><strong>The Strategic Governance & Protection Plane for Global Data Warehouse Environments.</strong></p>
 
 [![Standard: Data Security](https://img.shields.io/badge/Standard-Data--Security-blue.svg?style=for-the-badge&labelColor=000000)]()
 [![Status: Production--Ready](https://img.shields.io/badge/Status-Production--Ready-emerald.svg?style=for-the-badge&labelColor=000000)]()
@@ -13,7 +13,7 @@
 <br/>
 
 > **"Secure data is the foundation of the cloud."** 
-> Snowflake Security Toolkit (Snow-Sec) is an enterprise-grade platform designed to provide a secure, measurable, and highly automated foundation for global data warehouse governance. It orchestrates the complex lifecycle of data security—from high-resolution data classification and RBAC role hierarchy management to dynamic masking policies and intelligent query anomaly detection. By providing a centralized command center with real-time security posture visibility, automated policy enforcement, and immutable compliance audit trails, it enables organizations to eliminate data silos, reduce the risk of unauthorized access, and ensure consistent defensive excellence across every tier of the global Snowflake infrastructure.
+> **Snowflake Security Toolkit (Snow-Sec)** is an institutional-grade platform designed to provide a secure, measurable, and highly automated foundation for global data warehouse governance. It orchestrates the entire lifecycle—from high-resolution data classification and RBAC management to dynamic masking policies and query anomaly detection.
 
 </div>
 
@@ -21,396 +21,247 @@
 
 ## 🏛️ Executive Summary
 
-Modern data warehouses contain the enterprise's most sensitive assets. Organizations fail to maintain data security not because of a lack of features, but because of fragmented access controls, unmanaged PII exposure, and an inability to detect anomalous data exfiltration patterns in real time.
+Modern data warehouses contain the enterprise's most sensitive assets. Organizations often fail to maintain data security not because of a lack of features, but because of fragmented access controls and an inability to detect anomalous data exfiltration patterns in real time across thousands of objects.
 
-This platform provides the **Data Governance Plane**. It implements a complete **Data Security Intelligence Framework**—from automated role management and dynamic masking to a specialized query monitoring engine and regulatory compliance workflow. By operationalizing Snowflake security, it ensures that your data is not just stored, but continuously protected, governed, and audited with strategic precision.
+This platform provides the **Data Governance Plane**. It implements a complete **Data Security Intelligence Framework**, enabling Data Security and Engineering teams to manage Snowflake security as a first-class citizen. By automating role hierarchies and the enforcement of dynamic masking, we ensure that the organizational data is continuously protected, governed, and ready for institutional audits with strategic precision.
+
+---
+
+## 📐 Architecture Storytelling: Principal Reference Models
+
+### 1. Principal Architecture: Global Snowflake Data Security & Governance Plane
+This diagram illustrates the end-to-end flow from multi-cloud data ingestion and identity provisioning to automated masking and forensic query auditing.
+
+```mermaid
+graph LR
+    %% Subgraph Definitions
+    subgraph IdentityPlane["Identity & Access Plane"]
+        direction TB
+        IdP["Identity Provider (Okta/AD)"]
+        SCIM["SCIM Provisioning Engine"]
+        RBAC["RBAC Role Hierarchy Manager"]
+    end
+
+    subgraph SecurityIntelligence["Security Intelligence Engine"]
+        direction TB
+        API["FastAPI Security Gateway"]
+        Classify["Data Classification Engine"]
+        Masking["Dynamic Masking Orchestrator"]
+        Anomaly["Query Anomaly Detector"]
+    end
+
+    subgraph SnowflakeCore["Snowflake Data Warehouse Core"]
+        direction TB
+        Tables["Snowflake Tables & Views"]
+        Storage["Cloud Storage Integration (S3/GCS)"]
+        Audit["Snowflake Query History"]
+    end
+
+    subgraph ComplianceHub["Institutional Compliance & Auditing"]
+        direction TB
+        Dash["Security Posture Dashboard"]
+        AuditReport["GDPR / HIPAA / SOC2 Report"]
+        Forensic["Data Access Forensic Lake"]
+    end
+
+    subgraph DevOps["Security-as-Code Orchestration"]
+        direction TB
+        GH["GitHub Actions (Policy CI)"]
+        TF["Terraform Snowflake Provider"]
+        Policy["Security-as-Code Definitions"]
+    end
+
+    %% Flow Arrows
+    IdP -->|1. Sync Identity| SCIM
+    SCIM -->|2. Provision Users| RBAC
+    RBAC -->|3. Map Privileges| SnowflakeCore
+    
+    SnowflakeCore -->|4. Scan Schema| Classify
+    Classify -->|5. Apply Tags| Tables
+    Tables -->|6. Trigger Policy| Masking
+    
+    Audit -->|7. Telemetry| Anomaly
+    Anomaly -->|8. Alert| Dash
+    Dash -->|9. Map Compliance| AuditReport
+    
+    GH -->|10. Provision| TF
+    TF -->|11. Configure| SnowflakeCore
+    API -->|Forensic Logs| Forensic
+
+    %% Styling
+    classDef identity fill:#f5f5f5,stroke:#616161,stroke-width:2px;
+    classDef intel fill:#ede7f6,stroke:#311b92,stroke-width:2px;
+    classDef core fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px;
+    classDef compliance fill:#fce4ec,stroke:#880e4f,stroke-width:2px;
+    classDef devops fill:#fffde7,stroke:#f57f17,stroke-width:2px;
+
+    class IdentityPlane identity;
+    class SecurityIntelligence intel;
+    class SnowflakeCore core;
+    class ComplianceHub compliance;
+    class DevOps devops;
+```
+
+### 2. Snowflake RBAC Hierarchy Logic: Least Privilege
+Standardizing the relationship between system roles and functional business roles.
+
+```mermaid
+graph TD
+    Admin["ACCOUNTADMIN"] --> Sec["SECURITYADMIN"]
+    Admin --> Sys["SYSADMIN"]
+    Sec --> User["USERADMIN"]
+    Sys --> Func["Functional Role (Analyst)"]
+    Func --> Access["Object Access Role (Read_Only)"]
+```
+
+### 3. Dynamic Data Masking & RLS Flow
+The automated path for protecting PII and sensitive data based on the user's active context.
+
+```mermaid
+graph LR
+    User["Snowflake User"] --> Query["SELECT * FROM Users"]
+    Query --> Check{"Policy Engine"}
+    Check -->|ANALYST| Masked["'********' (Masked)"]
+    Check -->|HR_ADMIN| Clear["'user@domain.com' (Clear)"]
+```
+
+### 4. Network Isolation & PrivateLink Hub
+Ensuring all data traffic remains within a secure, private network tunnel.
+
+```mermaid
+graph LR
+    VPC["Corporate VPC / VNet"] --> PL["PrivateLink / Endpoint"]
+    PL --> SnowLink["Snowflake Private Endpoint"]
+    SnowLink --> Snowflake["Snowflake Account"]
+```
+
+### 5. Audit & Compliance Telemetry Pipeline
+Converting raw Snowflake query logs into actionable compliance records.
+
+```mermaid
+graph LR
+    History["Snowflake Query History"] --> Ingest["Audit Ingestor"]
+    Ingest --> Store["Forensic Metadata Lake"]
+    Store --> Report["Audit Readiness Report"]
+```
+
+### 6. External Cloud Storage Security (IAM Integration)
+Securing the connection between Snowflake and the underlying multi-cloud data lakes.
+
+```mermaid
+graph LR
+    Snow["Snowflake Storage Integration"] --> IAM["Cloud IAM Role (AssumeRole)"]
+    IAM --> Bucket["Encrypted S3 / GCS / Azure Blob"]
+    Bucket --> Data["Raw Data Files"]
+```
+
+### 7. SCIM Identity & Lifecycle Provisioning
+Automating user and role management to prevent stale account risks.
+
+```mermaid
+graph LR
+    Okta["Okta / Azure AD"] --> SCIM["SCIM API Hub"]
+    SCIM --> Sync["Snowflake User Sync"]
+    Sync --> Audit["Lifecycle Audit Log"]
+```
+
+### 8. Automated Security & Configuration Scan
+Continuous auditing of Snowflake objects for over-privileged access or misconfiguration.
+
+```mermaid
+graph TD
+    Scan["Security Scan"] --> C1{"Stale Roles?"}
+    C1 -->|Yes| Alert["Notification: Prune Role"]
+    Scan --> C2{"Public Shares?"}
+    C2 -->|Yes| Revoke["Auto-Revoke Access"]
+```
+
+### 9. Key Management: Tri-Secret Secure
+Visualizing the three-layered encryption strategy for institutional-grade data protection.
+
+```mermaid
+graph TD
+    Data["Encrypted Data"] --> Key1["Snowflake Managed Key"]
+    Key1 --> Key2["Customer Managed Key (KMS)"]
+    Key2 --> Key3["HSM / Hardware Security"]
+```
+
+### 10. IaC Deployment: Security-as-Code for Snowflake
+Using Terraform to version-control the entire security object model.
+
+```mermaid
+graph LR
+    HCL["Security-as-Code"] --> TF["Terraform Apply"]
+    TF --> Obj["Masking Policies / RBAC / Integrations"]
+    Obj --> Cloud["Production Snowflake Account"]
+```
+
+### 11. Metadata Lake for Data Forensics
+Storing long-term query and access patterns for security investigations and audits.
+
+```mermaid
+graph LR
+    Query["Live Query Event"] --> Stream["Forensic Stream"]
+    Stream --> Lake["Metadata Data Lake"]
+    Lake --> Trends["Access Trend Analysis"]
+```
 
 ---
 
 ## 🏛️ Core Security Pillars
 
-1. **Precision Data Classification**: Centralized hub for scanning and tagging Snowflake tables with sensitivity labels (PII, Sensitive, Public).
-2. **Dynamic Masking Orchestration**: Policy-driven engine that hides or obfuscates data in real time based on the user's active role.
-3. **Advanced RBAC Governance**: Strategic management of Snowflake role hierarchies and object-level privileges to ensure least privilege.
-4. **Query Anomaly Detection**: Intelligent monitoring of the query history to detect suspicious patterns like full table scans or unauthorized access.
-5. **Regulatory Compliance Mapping**: Automated mapping of Snowflake security controls to GDPR, HIPAA, and SOC2 frameworks.
-6. **Immutable Governance Audit**: Comprehensive logging of every access request, policy evaluation, and masking event for organizational transparency.
-
----
-
-## 📐 Architecture Storytelling: 50+ Advanced Diagrams
-
-### 1. The Snowflake Security Control Loop
-*The flow from raw data ingestion to governed access.*
-```mermaid
-graph TD
-    subgraph "Snowflake (Data Layer)"
-        Tables[Snowflake Tables]
-        Tags[Object Tags]
-        Roles[RBAC Roles]
-    end
-
-    subgraph "Governance (Snow-Sec)"
-        Classify[Classification Engine]
-        Mask[Dynamic Masking]
-        Monitor[Query Monitor]
-        Policy[Policy Engine]
-    end
-
-    Tables -->|1. Scan| Classify
-    Classify -->|2. Tag| Tags
-    Tags -->|3. Trigger| Mask
-    Roles -->|4. Authorize| Mask
-    Mask -->|5. Audit| Monitor
-    Monitor -->|6. Validate| Policy
-```
-
-### 2. Dynamic Masking Flow Topology
-```mermaid
-graph LR
-    User[Snowflake User] --> Role[Active Role]
-    Role --> Policy{Masking Policy}
-    Policy -->|ANALYST| Masked[********]
-    Policy -->|PII_ADMIN| Plain[user@email.com]
-```
-
-### 3. RBAC Hierarchy Model
-```mermaid
-graph TD
-    Admin[ACCOUNTADMIN] --> SecAdmin[SECURITYADMIN]
-    Admin --> SysAdmin[SYSADMIN]
-    SecAdmin --> UserAdmin[USERADMIN]
-    SysAdmin --> Custom[CUSTOM_ROLES]
-```
-
-### 4. Snowflake Security Architecture
-```mermaid
-graph LR
-    UI[React Dashboard] --> API[FastAPI Gateway]
-    API --> Cache[(Redis Policy Cache)]
-    API --> DB[(Postgres Metadata DB)]
-    API --> Worker[Security Workers]
-```
-
-### 5. Deployment Topology: High-Available Security Hub
-```mermaid
-graph LR
-    LB[Load Balancer] --> API[FastAPI Cluster]
-    API --> Queue[(Redis Task Queue)]
-    Queue --> W[Policy Engine]
-    W --> Snow[Snowflake APIs]
-```
-
-### 6. Data Classification Pipeline
-```mermaid
-graph LR
-    Schema[Table Schema] --> Rule1{Keyword Match?}
-    Rule1 -->|Yes| PII[Tag: PII]
-    Rule1 -->|No| Rule2{Sample Pattern?}
-    Rule2 -->|Match| PII
-```
-
-### 7. Foundation: Multi-Environment Setup
-```mermaid
-graph LR
-    F[Foun] --> M[Mult]
-```
-
-### 8. Networking: Secure Snowflake Tunnels
-```mermaid
-graph LR
-    N[Netw] --> S[Secu]
-```
-
-### 9. Component: Access Engine
-```mermaid
-graph LR
-    C[Comp] --> A[Acce]
-```
-
-### 10. Component: Masking Engine
-```mermaid
-graph LR
-    C[Comp] --> M[Mask]
-```
-
-### 11. Component: Monitoring Engine
-```mermaid
-graph LR
-    C[Comp] --> M[Moni]
-```
-
-### 12. Component: Policy Engine
-```mermaid
-graph LR
-    C[Comp] --> P[Poli]
-```
-
-### 13. Logic: Role Resolver
-```mermaid
-graph LR
-    L[Logi] --> R[Role]
-```
-
-### 14. Logic: Privilege Checker
-```mermaid
-graph LR
-    L[Logi] --> P[Priv]
-```
-
-### 15. Logic: Anomaly Detector
-```mermaid
-graph LR
-    L[Logi] --> A[Anom]
-```
-
-### 16. Logic: Compliance Mapper
-```mermaid
-graph LR
-    L[Logi] --> C[Comp]
-```
-
-### 17. Architecture: Global Data Plane
-```mermaid
-graph LR
-    A[Arch] --> G[Glob]
-```
-
-### 18. Architecture: Event-Driven Governance
-```mermaid
-graph LR
-    A[Arch] --> E[Even]
-```
-
-### 19. Architecture: Multi-Account Bridge
-```mermaid
-graph LR
-    A[Arch] --> M[Mult]
-```
-
-### 20. Pattern: Security-as-Code
-```mermaid
-graph LR
-    P[Patt] --> S[Secu]
-```
-
-### 21. Pattern: Least Privilege Enforcement
-```mermaid
-graph LR
-    P[Patt] --> L[Leas]
-```
-
-### 22. Pattern: Automated Data Tagging
-```mermaid
-graph LR
-    P[Patt] --> A[Auto]
-```
-
-### 23. Security: Signed Security Logs
-```mermaid
-graph LR
-    S[Secu] --> S[Sign]
-```
-
-### 24. Security: RBAC-Controlled Masking
-```mermaid
-graph LR
-    S[Secu] --> R[RBAC]
-```
-
-### 25. Security: Secure Audit Record
-```mermaid
-graph LR
-    S[Secu] --> S[Secu]
-```
-
-### 26. Feature: Security Posture Hub
-```mermaid
-graph LR
-    F[Feat] --> S[Secu]
-```
-
-### 27. Feature: Role Management UI
-```mermaid
-graph LR
-    F[Feat] --> R[Role]
-```
-
-### 28. Feature: Auto-generated Audit Report
-```mermaid
-graph LR
-    F[Feat] --> A[Auto]
-```
-
-### 29. Compliance: GDPR Data Protection
-```mermaid
-graph LR
-    C[Comp] --> G[GDPR]
-```
-
-### 30. Compliance: HIPAA Access Controls
-```mermaid
-graph LR
-    C[Comp] --> H[HIPA]
-```
-
-### 31. Infrastructure: Redis Policy Queue
-```mermaid
-graph LR
-    I[Infr] --> R[Redi]
-```
-
-### 32. Infrastructure: Postgres Governance DB
-```mermaid
-graph LR
-    I[Infr] --> P[Post]
-```
-
-### 33. Deployment: Kubernetes Security Pods
-```mermaid
-graph LR
-    D[Depl] --> K[Kube]
-```
-
-### 34. Deployment: Multi-Region Data Sync
-```mermaid
-graph LR
-    D[Depl] --> M[Mult]
-```
-
-### 35. Monitoring: Policy Success KPI
-```mermaid
-graph LR
-    M[Moni] --> P[Poli]
-```
-
-### 36. Monitoring: Query Anomaly Analytics
-```mermaid
-graph LR
-    M[Moni] --> Q[Quer]
-```
-
-### 37. UI: Security Command View
-```mermaid
-graph LR
-    U[UI] --> S[Secu]
-```
-
-### 38. UI: Masking Policy Designer
-```mermaid
-graph LR
-    U[UI] --> M[Mask]
-```
-
-### 39. UI: Query History Auditor
-```mermaid
-graph LR
-    U[UI] --> Q[Quer]
-```
-
-### 40. UI: Compliance Dashboard
-```mermaid
-graph LR
-    U[UI] --> C[Comp]
-```
-
-### 41. CI/CD: Policy validation pipeline
-```mermaid
-graph LR
-    C[CICD] --> P[Poli]
-```
-
-### 42. CI/CD: Role testing workflow
-```mermaid
-graph LR
-    C[CICD] --> R[Role]
-```
-
-### 43. Strategy: Visibility-First Governance
-```mermaid
-graph LR
-    S[Stra] --> V[Visi]
-```
-
-### 44. Strategy: Automation-First Security
-```mermaid
-graph LR
-    S[Stra] --> A[Auto]
-```
-
-### 45. Feature: Multi-Cloud Data Collector
-```mermaid
-graph LR
-    F[Feat] --> M[Mult]
-```
-
-### 46. Feature: Stale Role Detector
-```mermaid
-graph LR
-    F[Feat] --> S[Stal]
-```
-
-### 47. Feature: Governance Scorecard
-```mermaid
-graph LR
-    F[Feat] --> G[Gove]
-```
-
-### 48. Logic: Role Conflict Solver
-```mermaid
-graph LR
-    L[Logi] --> R[Role]
-```
-
-### 49. Data Model: Security Audit Entity
-```mermaid
-graph LR
-    D[Data] --> S[Secu]
-```
-
-### 50. Enterprise Data Excellence
-```mermaid
-graph LR
-    E[Entr] --> D[Data]
-```
+1.  **Precision Data Classification**: Centralized hub for scanning and tagging tables with sensitivity labels (PII, Sensitive, Public).
+2.  **Dynamic Masking Orchestration**: Policy-driven engine that hides or obfuscates data in real time based on user roles.
+3.  **Advanced RBAC Governance**: Strategic management of Snowflake role hierarchies and object-level privileges.
+4.  **Query Anomaly Detection**: Intelligent monitoring of query history to detect suspicious patterns and full table scans.
+5.  **Regulatory Compliance Mapping**: Automated mapping of security controls to GDPR, HIPAA, and SOC2 frameworks.
+6.  **Immutable Governance Audit**: Comprehensive logging of every access request and policy evaluation for transparency.
 
 ---
 
 ## 🛠️ Technical Stack & Implementation
 
 ### Snowflake Engine & APIs
-- **Framework**: Python 3.11+ / FastAPI.
-- **Access Engine**: Simulated RBAC with role hierarchy and privilege resolution.
-- **Masking Engine**: Dynamic role-based masking for PII and sensitive data.
-- **Monitoring Engine**: Query history analyzer for anomaly and threat detection.
-- **Cache**: Redis for high-speed policy resolution and security event queuing.
-- **Persistence**: PostgreSQL for security metadata, audit histories, and role definitions.
-- **Compliance**: Mapping logic for GDPR, HIPAA, and SOC2.
+*   **Framework**: Python 3.11+ / FastAPI.
+*   **Access Engine**: Strategic management of RBAC role hierarchies and privilege resolution.
+*   **Masking Engine**: Dynamic role-based masking logic for PII and sensitive fields.
+*   **Monitoring Engine**: Query history analyzer for detecting exfiltration and anomaly patterns.
+*   **State Management**: PostgreSQL (Metadata) and Redis (Security Event Cache).
 
-### Frontend (Security Dashboard)
-- **Framework**: React 18 / Vite.
-- **Theme**: Sky / Slate (Modern Cloud Security & Data aesthetic).
-- **Visualization**: Recharts for query velocity and data sensitivity heatmaps.
+### Security Dashboard (UI)
+*   **Framework**: React 18 / Vite.
+*   **Theme**: Sky / Slate (Modern Cloud Security & Data aesthetic).
+*   **Visualization**: Recharts for query velocity trendlines and data sensitivity heatmaps.
 
-### Infrastructure
-- **Runtime**: AWS EKS (Kubernetes).
-- **Deployment**: Helm charts for security clusters and monitoring workers.
-- **IaC**: Terraform (Modular with Snowflake focus).
+### Infrastructure & DevOps
+*   **Runtime**: AWS EKS or Azure Kubernetes Service (AKS).
+*   **IaC**: Modular Terraform for deploying the security toolkit and audit pipelines.
+
+---
+
+## 🏗️ IaC Mapping (Module Structure)
+
+| Module | Purpose | Real Services |
+| :--- | :--- | :--- |
+| **`infrastructure/governance`** | Management plane and workers | EKS, PostgreSQL, Redis |
+| **`infrastructure/integrations`** | Identity and storage connectors | SCIM, IAM, KMS, S3/GCS |
+| **`infrastructure/policies`** | Security-as-Code definitions | Terraform Snowflake Provider |
+| **`infrastructure/auditing`** | Query and access forensics | Athena, BigQuery, ELK |
 
 ---
 
 ## 🚀 Deployment Guide
 
-### Local Development
+### Local Principal Environment
 ```bash
-# Clone the repository
+# Clone the security toolkit
 git clone https://github.com/devopstrio/snowflake-security-toolkit.git
 cd snowflake-security-toolkit
 
-# Setup environment
+# Configure environment
 cp .env.example .env
 
-# Launch the Security stack (API, Workers, DB, Redis, UI)
+# Launch the Security stack
 make up
 
 # Run a data classification scan
@@ -419,9 +270,15 @@ make classify-data
 # Run query anomaly detection
 make monitor-queries
 ```
-Access the Security Hub at `http://localhost:3000`.
+
+Access the Security Command Center at `http://localhost:3000`.
 
 ---
 
 ## 📜 License
 Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+<div align="center">
+  <p>© 2026 Devopstrio. All rights reserved.</p>
+</div>
